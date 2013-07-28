@@ -8,9 +8,9 @@ This is a small package that adds:
 #Usage
 In short:
 Schema and schema less documents are minified to an array format:
-1. Array of keywords
-2. Array of data schemas
-3. Array of data
+  1. Array of keywords
+  2. Array of data schemas
+  3. Array of data
 
 #How does it work? (example)
 
