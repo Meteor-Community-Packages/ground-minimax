@@ -1,0 +1,10 @@
+{
+  "name": "Minimax",
+  "description": "Minimax is a thin layer providing EJSON.minify and EJSON.maxify",
+  "homepage": "https://github.com/raix/Meteor-ejson-minimax",
+  "author": "Morten Henriksen  (http://gi-software.com)",
+  "version": "0.0.1",
+  "git": "https://github.com/raix/Meteor-ejson-minimax.git",
+  "packages": {
+  }
+}
