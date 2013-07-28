@@ -67,3 +67,17 @@ The keyword array contains key names
   { _id:"5qSjMxCjkNF2SFBy6", foo :"test" }
 
 ```
+
+##Speed test
+```js
+JSON.parse time: 0.0207 ms
+EJSON.parse time: 0.2005 ms
+EJSON.maxify time: 0.0555 ms
+JSON.stringify time: 0.0099 ms
+EJSON.stringify time: 0.0112 ms
+EJSON.minify time: 0.0502 ms 
+```
+
+##Future
+* Faster code
+* Better compression
