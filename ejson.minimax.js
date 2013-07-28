@@ -31,8 +31,8 @@
 
 
   EJSON.minify = function(maxObj) {
-    var keywords = {};
-    var keywordsList = [];
+    var keywords = {false: 0, true: 1, null: 2};
+    var keywordsList = [false, true, null];
     var headers = [0];
 
     var getIdKeywork = function(key) {
@@ -96,10 +96,10 @@
 
       _.each(maxObj, function(value, key) {
         var minKey = (createHeader) ? getIdKeywork(key) : 0;
-        if (typeof value === 'object') {
+        if (value !== null && typeof value === 'object') {
           // Array or Object
           if (createHeader) {
-            header.push(minKey); // TODO: push object or Array
+            header.push(minKey);
           }
           target.push(minifyHelper(value));
         } else {
@@ -124,6 +124,12 @@
       } else {
         target.unshift(0); // 0 marks an array with no headers
       }
+
+      // Remove the heading false, true, null - these are added at maximize
+      keywordsList.shift();
+      keywordsList.shift();
+      keywordsList.shift();
+
       return target;
     };
 
@@ -148,6 +154,11 @@
     var keywordsList = minObj[0];
     var headers = minObj[1];
     var data = minObj[2];
+
+    // Add [false, true, null] to the beginning
+    keywordsList.unshift(null);
+    keywordsList.unshift(true);
+    keywordsList.unshift(false);
 
     var maxifyHelper = function(minObj) {
       // read header reference and fetch the header
