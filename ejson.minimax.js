@@ -25,7 +25,7 @@
 
   if(!Array.isArray) {
     Array.isArray = function (vArg) {
-      return Object.prototype.toString.call(vArg) === "[object Array]";
+      return Object.prototype.toString.call(vArg) === '[object Array]';
     };
   }
 
@@ -125,10 +125,6 @@
         target.unshift(0); // 0 marks an array with no headers
       }
 
-      // Remove the heading false, true, null - these are added at maximize
-      keywordsList.shift();
-      keywordsList.shift();
-      keywordsList.shift();
 
       return target;
     };
@@ -137,7 +133,14 @@
       return EJSON.stringify(maxObj);
     }
 
-    return JSON.stringify([ keywordsList, headers, minifyHelper(EJSON.toJSONValue(maxObj)) ]);
+    var data = minifyHelper(EJSON.toJSONValue(maxObj));
+
+    // Remove the heading false, true, null - these are added at maximize
+    keywordsList.shift();
+    keywordsList.shift();
+    keywordsList.shift();
+
+    return JSON.stringify([ keywordsList, headers, data ]);
   };
   
 
@@ -156,9 +159,7 @@
     var data = minObj[2];
 
     // Add [false, true, null] to the beginning
-    keywordsList.unshift(null);
-    keywordsList.unshift(true);
-    keywordsList.unshift(false);
+    keywordsList.unshift(false, true, null);
 
     var maxifyHelper = function(minObj) {
       // read header reference and fetch the header

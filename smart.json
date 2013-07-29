@@ -3,7 +3,7 @@
   "description": "Minimax is a thin layer providing EJSON.minify and EJSON.maxify",
   "homepage": "https://github.com/raix/ejson-minimax",
   "author": "Morten Henriksen  (http://gi-software.com)",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "git": "https://github.com/raix/ejson-minimax.git",
   "packages": {
   }

@@ -38,8 +38,15 @@ In EJSON.stringify = 136 chars
 
 In EJSON.minify = 117 chars saved 14% space
 ```js
-[["5qSjMxCjkNF2SFBy6","_id","foo","rbieX9SbdGgfSWCd7","bar"],
-[0,[-1,2,4],[0,3]],[2,[1,0,"test"],[1,3,"test","okay"]]] 
+[["5qSjMxCjkNF2SFBy6","_id","foo","rbieX9SbdGgfSWCd7","bar"], // Keywords
+[0,[-1,2,4],[0,3]], // Schema
+[2,[1,0,"test"],[1,3,"test","okay"]]] // Data
+```
+
+The data array it self in this example is only about 36 chars ~ 27% of the original EJSON.stringify - if both server and client have keywords and the schema only the data would have to be sent.
+
+```js
+[2,[1,0,"test"],[1,3,"test","okay"]] 
 ```
 
 ```js
