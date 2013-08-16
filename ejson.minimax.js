@@ -129,7 +129,8 @@
       return target;
     };
 
-    if (Object.keys(maxObj).length === 0) {
+    // If not an object then not much to work on
+    if (typeof maxObj !== 'object') {
       return EJSON.stringify(maxObj);
     }
 
