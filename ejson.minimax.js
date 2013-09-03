@@ -23,15 +23,15 @@
 
   var data = []; */
 
-  if(!Array.isArray) {
-    Array.isArray = function (vArg) {
-      return Object.prototype.toString.call(vArg) === '[object Array]';
-    };
-  }
+  // if(!Array.isArray) {
+  //   Array.isArray = function (vArg) {
+  //     return Object.prototype.toString.call(vArg) === '[object Array]';
+  //   };
+  // }
 
 
   EJSON.minify = function(maxObj) {
-    var keywords = {false: 0, true: 1, null: 2};
+    var keywords = {'false': 0, 'true': 1, 'null': 2};
     var keywordsList = [false, true, null];
     var headers = [0];
 
@@ -44,8 +44,9 @@
 
     // we give a value - if found in keywords then an id is returned else null
     var getIdKeywordValue = function(value) {
-      if (typeof keywords[value] !== 'undefined') {
-        return keywords[value];
+      var key = String(value);
+      if (typeof keywords[key] !== 'undefined') {
+        return keywords[key];
       }
       return null;
     };
@@ -90,7 +91,7 @@
     };
 
     var minifyHelper = function(maxObj) {
-      var createHeader = !Array.isArray(maxObj);
+      var createHeader = !_.isArray(maxObj);
       var target = [];
       var header = [];
 
@@ -148,7 +149,7 @@
   // Takes an minify JSON object and maxify to object
   EJSON.maxify = function(minObjJSON) {
     // Parse the string into array
-    var minObj = JSON.parse(minObjJSON);
+    var minObj = JSON.parse(String(minObjJSON));
     // We expect an array of 3
     if (minObj === null || minObj.length !== 3) {
       // Return normal EJSON.parse
@@ -173,7 +174,7 @@
       if (header === null) {
         // Create an array
         for (var i = 0; i < minObj.length; i++) {
-          if (Array.isArray(minObj[i])) {
+          if (_.isArray(minObj[i])) {
             result.push(maxifyHelper(minObj[i]));
           } else {
             result.push(minObj[i]);
@@ -187,7 +188,7 @@
           // Lookup keyword
           var key = keywordsList[Math.abs(keyId)];
           // Is value an array then dig deeper
-          if (Array.isArray(minObj[i])) {
+          if (_.isArray(minObj[i])) {
             result[key] = maxifyHelper(minObj[i]);
           } else {
             var value = minObj[i]; // Value or valueId
