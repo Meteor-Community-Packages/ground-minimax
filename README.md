@@ -1,4 +1,4 @@
-EJSON - Minimax
+EJSON - Minimax [![Build Status](https://travis-ci.org/raix/ejson-minimax.png?branch=master)](https://travis-ci.org/raix/ejson-minimax)
 ===============
 
 This is a small package that adds:
