@@ -1,5 +1,5 @@
 {
-  "name": "Minimax",
+  "name": "ejson-minimax",
   "description": "Minimax is a thin layer providing EJSON.minify and EJSON.maxify",
   "homepage": "https://github.com/raix/ejson-minimax",
   "author": "Morten Henriksen  (http://gi-software.com)",
