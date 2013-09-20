@@ -1,5 +1,6 @@
 Package.describe({
-  summary: "\u001b[32mv0.0.4\n"+
+  summary: "Adds EJSON.minify and EJSON.maxify\n"+
+  "\u001b[32mv0.0.4\n"+
   "\u001b[33m-----------------------------------------\n"+
   "\u001b[0m Minimax is a thin layer providing        \n"+
   "\u001b[0m EJSON.minify and EJSON.maxify            \n"+
