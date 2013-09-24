@@ -5,7 +5,10 @@
 
   EJSON.maxify( JSON string )
 
-  
+  TODO:
+  Make minify and maxify object operators only - leave the stringify and parsing
+  to the user if they need it - This way the operation is isolated and could be
+  used in more cases
 
 
   // For faster lookup
