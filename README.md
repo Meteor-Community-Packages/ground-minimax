@@ -1,4 +1,4 @@
-EJSON - Minimax [![Build Status](https://travis-ci.org/raix/ejson-minimax.png?branch=master)](https://travis-ci.org/raix/ejson-minimax) [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L7LNPM3PMQZNL)
+EJSON - Minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax) [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L7LNPM3PMQZNL)
 ===============
 
 This is a small package that adds:
