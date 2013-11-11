@@ -17,6 +17,8 @@ var speedTest = function(name, num, func) {
 
 
 Tinytest.add('Minify Maxify - test', function(test) {
+  var minResult, maxResult, ejsonResult, savedBytes;
+
   var testObject = function(text, obj) {
     minResult = EJSON.minify(obj);
 
