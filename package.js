@@ -1,5 +1,5 @@
 Package.describe({
-  summary: "Adds EJSON.minify and EJSON.maxify");
+  summary: "Adds EJSON.minify and EJSON.maxify"});
 
 Package.on_use(function (api) {
   // TODO: remove underscore deps _.each (used once)
