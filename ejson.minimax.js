@@ -145,18 +145,16 @@
     keywordsList.shift();
     keywordsList.shift();
 
-    return JSON.stringify([ keywordsList, headers, data ]);
+    return [ keywordsList, headers, data ];
   };
   
 
-  // Takes an minify JSON object and maxify to object
-  EJSON.maxify = function(minObjJSON) {
-    // Parse the string into array
-    var minObj = JSON.parse(String(minObjJSON));
+  // Takes an minify object and maxify to object
+  EJSON.maxify = function(minObj) {
     // We expect an array of 3
     if (minObj === null || minObj.length !== 3) {
       // Return normal EJSON.parse
-      return EJSON.fromJSONValue(minObj);
+      return minObj;
     }
     // Init globals
     var keywordsList = minObj[0];
