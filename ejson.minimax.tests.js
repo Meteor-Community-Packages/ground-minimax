@@ -20,21 +20,21 @@ Tinytest.add('Minify Maxify - test', function(test) {
   var minResult, maxResult, ejsonResult, savedBytes;
 
   var testObject = function(text, obj) {
-    minResult = EJSON.minify(obj);
+    minResult = MiniMax.stringify(obj);
 
-    maxResult = EJSON.maxify(minResult);
+    maxResult = MiniMax.parse(minResult);
 
     ejsonResult = EJSON.stringify(obj);
 
     savedBytes = ejsonResult.length - minResult.length;
 
     console.log(ejsonResult.length + ' > ' + minResult.length + ' '+ Math.round(savedBytes/ejsonResult.length*100) + "%");
-    
+
     console.log(maxResult);
 
     console.log(obj);
-    
-    test.isTrue(EJSON.equals(maxResult, obj), text);  
+
+    test.isTrue(EJSON.equals(maxResult, obj), text);
   };
 
 
@@ -84,8 +84,8 @@ Tinytest.add('Minify Maxify - test', function(test) {
     EJSON.parse(myJSON);
   });
 
-  speedTest('EJSON.maxify time: ', iterations, function() {
-    EJSON.maxify(minResult);
+  speedTest('MiniMax.maxify time: ', iterations, function() {
+    MiniMax.maxify(minResult);
   });
 
   speedTest('JSON.stringify time: ', iterations, function() {
@@ -96,8 +96,8 @@ Tinytest.add('Minify Maxify - test', function(test) {
     EJSON.stringify(myJSON);
   });
 
-  speedTest('EJSON.minify time: ', iterations, function() {
-    EJSON.minify(maxResult);
+  speedTest('MiniMax.minify time: ', iterations, function() {
+    MiniMax.minify(maxResult);
   });
 
 

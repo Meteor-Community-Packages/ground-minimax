@@ -3,7 +3,7 @@
 
   EJSON.minify( Object )
 
-  EJSON.maxify( JSON string )
+  EJSON.maxify( array )
 
   TODO:
   Make minify and maxify object operators only - leave the stringify and parsing
@@ -32,27 +32,22 @@
   //   };
   // }
 
+  // Create the export scope
+  if (typeof MiniMax === 'undefined')
+    MiniMax = {};
+  // Create a new dictionary
+  MiniMax.Dictionary = new Dictionary();
 
-  EJSON.minify = function(maxObj) {
-    var keywords = {'false': 0, 'true': 1, 'null': 2};
-    var keywordsList = [false, true, null];
+  // Set the initial dicationary
+  MiniMax.Dictionary.set([false, true, null]);
+
+
+  MiniMax.minify = function(maxObj) {
+
     var headers = [0];
 
-    var getIdKeywork = function(key) {
-      if (typeof keywords[key] === 'undefined') {
-        keywords[key] = keywordsList.push(key) - 1;
-      }
-      return keywords[key];
-    };
-
-    // we give a value - if found in keywords then an id is returned else null
-    var getIdKeywordValue = function(value) {
-      var key = String(value);
-      if (typeof keywords[key] !== 'undefined') {
-        return keywords[key];
-      }
-      return null;
-    };
+    // Start dictionary
+    var dict = new Dictionary(MiniMax.Dictionary);
 
     var getHeader = function(newHeader) {
       var headerId = null;
@@ -99,7 +94,9 @@
       var header = [];
 
       _.each(maxObj, function(value, key) {
-        var minKey = (createHeader) ? getIdKeywork(key) : 0;
+
+        var minKey = (createHeader) ? dict.add(key) : 0;
+
         if (value !== null && typeof value === 'object') {
           // Array or Object
           if (createHeader) {
@@ -108,9 +105,9 @@
           target.push(minifyHelper(value));
         } else {
           // Check if value is found in keywords
-          var valueId = getIdKeywordValue(value);
+          var valueId = dict.index(value);
 
-          if (valueId === null) {
+          if (valueId === undefined) {
             // Not found, we add normal values
             header.push(minKey);
             target.push(value);
@@ -135,34 +132,28 @@
 
     // If not an object then not much to work on
     if (typeof maxObj !== 'object') {
-      return EJSON.stringify(maxObj);
+      return maxObj;
     }
 
-    var data = minifyHelper(EJSON.toJSONValue(maxObj));
-
-    // Remove the heading false, true, null - these are added at maximize
-    keywordsList.shift();
-    keywordsList.shift();
-    keywordsList.shift();
-
-    return [ keywordsList, headers, data ];
+    var data = minifyHelper(maxObj);
+console.log(dict.withoutInitial(), dict.list);
+    return [ dict.withoutInitial(), headers, data ];
   };
-  
+
 
   // Takes an minify object and maxify to object
-  EJSON.maxify = function(minObj) {
+  MiniMax.maxify = function(minObj) {
     // We expect an array of 3
     if (minObj === null || minObj.length !== 3) {
-      // Return normal EJSON.parse
+      // Return object
       return minObj;
     }
     // Init globals
-    var keywordsList = minObj[0];
+    var dict = new Dictionary(MiniMax.Dictionary);
+    dict.addList(minObj[0]);
+
     var headers = minObj[1];
     var data = minObj[2];
-
-    // Add [false, true, null] to the beginning
-    keywordsList.unshift(false, true, null);
 
     var maxifyHelper = function(minObj) {
       // read header reference and fetch the header
@@ -187,7 +178,7 @@
           // Lookup keyword id can be negative for value lookup
           var keyId = header[i];
           // Lookup keyword
-          var key = keywordsList[Math.abs(keyId)];
+          var key = dict.value(Math.abs(keyId));
           // Is value an array then dig deeper
           if (_.isArray(minObj[i])) {
             result[key] = maxifyHelper(minObj[i]);
@@ -195,7 +186,7 @@
             var value = minObj[i]; // Value or valueId
             // if keyId is negative then lookup the value in keywords
             if (keyId < 0) {
-              value = keywordsList[value];
+              value = dict.value(value);
             }
             result[key] = value;
           }
@@ -204,5 +195,13 @@
       return result;
     };
 
-    return EJSON.fromJSONValue(maxifyHelper(data));
+    return maxifyHelper(data);
+  };
+
+  MiniMax.stringify = function(obj) {
+    return EJSON.stringify(this.minify(obj));
+  };
+
+  MiniMax.parse = function(str) {
+    return this.maxify(EJSON.parse(str));
   };

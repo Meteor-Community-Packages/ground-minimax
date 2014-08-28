@@ -1,18 +1,23 @@
 Package.describe({
-  version: '0.0.0',
+  name: "raix:minimax",
+  version: '0.0.8',
   summary: "Adds EJSON.minify and EJSON.maxify"
 });
 
 Package.on_use(function (api) {
   // TODO: remove underscore deps _.each (used once)
-  api.use(['underscore', 'ejson'], ['client', 'server']);
-  api.imply('ejson');
+  api.use([
+    'underscore@1.0.0',
+    'ejson@1.0.0'
+  ], ['client', 'server']);
+  api.use(['raix:dictionary@0.0.0'], ['client', 'server']);
+  api.export('MiniMax');
 
   api.add_files('ejson.minimax.js', ['client', 'server']);
 });
 
 Package.on_test(function (api) {
-  api.use('ejson-minimax', ['client', 'server']);
+  api.use('raix:minimax', ['client', 'server']);
   api.use('test-helpers', 'client');
   api.use(['tinytest', 'underscore', 'ejson']);
 

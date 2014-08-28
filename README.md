@@ -1,9 +1,11 @@
-EJSON - Minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
+Minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
 ===============
 
 This is a small package that adds:
-* `EJSON.minify` ~ Like a compressed version of `EJSON.stringify`
-* `EJSON.maxify` ~ Like the decomressing version of `EJSON.parse`
+* `MiniMax.minify` Compress object to array structure
+* `MiniMax.maxify` Decompress to object
+* `MiniMax.stringify` ~ Like a compressed version of `EJSON.stringify`
+* `MiniMax.parse` ~ Like the decomressing version of `EJSON.parse`
 
 ##Usage
 In short:
