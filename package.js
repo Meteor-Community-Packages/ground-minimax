@@ -1,7 +1,7 @@
 Package.describe({
   name: "raix:minimax",
-  version: '0.0.8',
-  summary: "Adds EJSON.minify and EJSON.maxify"
+  version: '0.0.9',
+  summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects"
 });
 
 Package.on_use(function (api) {
