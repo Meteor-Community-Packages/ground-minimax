@@ -1,6 +1,6 @@
 Package.describe({
   name: "raix:minimax",
-  version: '0.0.9',
+  version: '0.1.0',
   summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects"
 });
 
