@@ -136,7 +136,7 @@
     }
 
     var data = minifyHelper(maxObj);
-console.log(dict.withoutInitial(), dict.list);
+
     return [ dict.withoutInitial(), headers, data ];
   };
 
