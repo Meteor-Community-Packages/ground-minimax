@@ -13,7 +13,23 @@ var speedTest = function(name, num, func) {
   console.log(name + ((Date.now() - startTime))/num + ' ms');
 }
 
+Tinytest.add('Minify Maxify - test date', function(test) {
+  var newTimeStamp = 1409300873188;
+  var newDate = new Date(newTimeStamp);
 
+  var obj = {
+    updatedAt: newDate
+  };
+
+  var toString = MiniMax.stringify(obj);
+  var fromString = MiniMax.parse(toString);
+
+  console.log('toString', toString);
+  console.log('fromString', fromString);
+
+  test.instanceOf(obj.updatedAt, Date, 'Test Date is not handled correctly');
+  test.instanceOf(fromString.updatedAt, Date, 'Date is not handled correctly');
+});
 
 
 Tinytest.add('Minify Maxify - test', function(test) {

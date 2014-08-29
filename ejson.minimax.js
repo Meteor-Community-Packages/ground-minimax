@@ -102,7 +102,13 @@
           if (createHeader) {
             header.push(minKey);
           }
-          target.push(minifyHelper(value));
+
+          if (value instanceof Date) {
+            // Dont minify dates
+            target.push(value);
+          } else {
+            target.push(minifyHelper(value));
+          }
         } else {
           // Check if value is found in keywords
           var valueId = dict.index(value);
@@ -199,9 +205,11 @@
   };
 
   MiniMax.stringify = function(obj) {
-    return EJSON.stringify(this.minify(obj));
+    var ejsonObj = EJSON.toJSONValue(obj);
+    return JSON.stringify(this.minify(ejsonObj));
   };
 
   MiniMax.parse = function(str) {
-    return this.maxify(EJSON.parse(str));
+    var ejsonObj = this.maxify(JSON.parse(str));
+    return EJSON.fromJSONValue(ejsonObj);
   };
