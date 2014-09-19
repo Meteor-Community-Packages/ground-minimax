@@ -1,6 +1,6 @@
 Package.describe({
   name: "ground:minimax",
-  version: '0.0.0',
+  version: '0.0.2',
   summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects"
 });
 
@@ -17,7 +17,7 @@ Package.on_use(function (api) {
       'ejson'
     ], ['client', 'server']);
 
-    api.use(['ground:dictionary@0.0.0'], ['client', 'server']);
+    api.use(['ground:dictionary@0.0.1'], ['client', 'server']);
 
   } else {
 
