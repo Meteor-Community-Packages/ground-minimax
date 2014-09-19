@@ -1,4 +1,4 @@
-Minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
+ground:minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
 ===============
 
 This is a small package that adds:
