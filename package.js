@@ -1,7 +1,8 @@
 Package.describe({
   name: "ground:minimax",
   version: '0.0.2',
-  summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects"
+  summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects",
+  git: "https://github.com/GroundMeteor/minimax.git"
 });
 
 Package.on_use(function (api) {
