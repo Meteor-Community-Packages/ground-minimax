@@ -46,6 +46,25 @@ Tinytest.add('Minify Maxify - raw test object', function(test) {
   test.isTrue(equals(foo,  bar), 'Raw compare failed "' + JSON.stringify(barMini) + '" -> "' + JSON.stringify(bar)) + '"';
 });
 
+Tinytest.add('Minify Maxify - dictionary raw', function(test) {
+  var MiniMaxDB = new MiniMax({
+    // We add the most general words in databases
+    dictionary: ['_id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy']
+  });
+  var foo = {
+    _id: '333',
+    createdBy: 'Morten',
+    createdAt: new Date(),
+    updatedBy: 'Morten',
+    updatedAt: new Date(),
+    a: ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}]
+  };
+  var barMini = MiniMaxDB.minify(foo);
+  var bar = MiniMaxDB.maxify(barMini);
+console.log('BAR', barMini);
+  test.isTrue(equals(foo,  bar), 'Raw compare failed "' + JSON.stringify(barMini) + '" -> "' + JSON.stringify(bar)) + '"';
+});
+
 
 Tinytest.add('Minify Maxify - test', function(test) {
   var minResult, maxResult, ejsonResult, savedBytes;
