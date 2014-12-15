@@ -50,10 +50,8 @@
     options = options || {};
 
     // Set the default Dictionary
-    self.dictionary = new Dictionary([false, true, null, undefined]);
-
     // If the user added initial dictionary then add those
-    if (options.dictionary) self.dictionary.set(options.dictionary);
+    self.dictionary = new Dictionary(_.union([false, true, null, undefined], options.dictionary || [] ));
   };
 
   MiniMax.prototype.minify = function(maxObj) {
