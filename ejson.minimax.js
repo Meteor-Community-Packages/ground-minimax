@@ -1,4 +1,12 @@
 /*
+
+
+                    __  ____       _ __  ___
+                   /  |/  (_)___  (_)  |/  /___ __  __
+                  / /|_/ / / __ \/ / /|_/ / __ `/ |/_/
+                 / /  / / / / / / / /  / / /_/ />  <
+                /_/  /_/_/_/ /_/_/_/  /_/\__,_/_/|_|
+
   Minify and Maxify by RaiX aka Morten N.O. Nørgaard Henriksen (mh@gi-software.com)
 
   EJSON.minify( Object )
