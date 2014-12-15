@@ -39,21 +39,29 @@
   // }
 
   // Create the export scope
-  if (typeof MiniMax === 'undefined')
-    MiniMax = {};
-  // Create a new dictionary
-  MiniMax.Dictionary = new Dictionary();
+  MiniMax = function(options) {
+    var self = this;
 
-  // Set the initial dicationary
-  MiniMax.Dictionary.set([false, true, null]);
+    // Make sure we are on an instance
+    if (!(self instanceof MiniMax))
+      return new MiniMax(options);
 
+    // Make sure options is set
+    options = options || {};
 
-  MiniMax.minify = function(maxObj) {
+    // Set the default Dictionary
+    self.dictionary = new Dictionary([false, true, null, undefined]);
 
+    // If the user added initial dictionary then add those
+    if (options.dictionary) self.dictionary.set(options.dictionary);
+  };
+
+  MiniMax.prototype.minify = function(maxObj) {
+    var self = this;
     var headers = [0];
 
     // Start dictionary
-    var dict = new Dictionary(MiniMax.Dictionary);
+    var dict = new Dictionary(self.dictionary);
 
     var getHeader = function(newHeader) {
       var headerId = null;
@@ -154,14 +162,17 @@
 
 
   // Takes an minify object and maxify to object
-  MiniMax.maxify = function(minObj) {
+  MiniMax.prototype.maxify = function(minObj) {
+    var self = this;
+
     // We expect an array of 3
     if (minObj === null || minObj.length !== 3) {
       // Return object
       return minObj;
     }
+
     // Init globals
-    var dict = new Dictionary(MiniMax.Dictionary);
+    var dict = new Dictionary(self.dictionary);
     dict.addList(minObj[0]);
 
     var headers = minObj[1];
@@ -210,12 +221,34 @@
     return maxifyHelper(data);
   };
 
-  MiniMax.stringify = function(obj) {
+  MiniMax.prototype.stringify = function(obj) {
     var ejsonObj = EJSON.toJSONValue(obj);
     return JSON.stringify(this.minify(ejsonObj));
   };
 
-  MiniMax.parse = function(str) {
+  MiniMax.prototype.parse = function(str) {
     var ejsonObj = this.maxify(JSON.parse(str));
     return EJSON.fromJSONValue(ejsonObj);
   };
+
+////////////////////////////////////////////////////////////////////////////////
+//  DEFAULT BEHAVIOUR
+////////////////////////////////////////////////////////////////////////////////
+
+var defaultMiniMax = new MiniMax();
+
+MiniMax.minify = function(maxObj) {
+  return defaultMiniMax.minify(maxObj);
+};
+
+MiniMax.maxify = function(minObj) {
+  return defaultMiniMax.maxify(minObj);
+};
+
+MiniMax.stringify = function(obj) {
+  return defaultMiniMax.stringify(obj);
+};
+
+MiniMax.parse = function(str) {
+  return defaultMiniMax.parse(str);
+};
