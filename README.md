@@ -14,6 +14,25 @@ Schema and schema less documents are minified to an array format:
   2. Array of data schemas
   3. Array of data
 
+```js
+  // The default got false, true, null and undefined in dictionary
+  var normalMiniMax = new MiniMax();
+
+  // Add additional words to the dictionary, eg. if used on a database,
+  // This will help MiniMax compress the data even more.
+  // The order and combination is vital for when uncompressing the data
+  var myMiniDB = new MiniMax({
+    dictionary: ['createdAt', 'createdBy', 'UpdatedAt', 'UpdatedBy']
+  });
+
+  // By default an instance of MiniMax is available using the default
+  // dictionary
+  MiniMax.minify
+  MiniMax.maxify
+  MiniMax.stringify
+  MiniMax.parse
+```
+
 ##How does it work? (example)
 
 Our data object:
