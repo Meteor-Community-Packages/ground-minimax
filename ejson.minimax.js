@@ -103,17 +103,17 @@
     };
 
     var minifyHelper = function(maxObj) {
-      var createHeader = !_.isArray(maxObj);
+      var inArray = !_.isArray(maxObj);
       var target = [];
       var header = [];
 
       _.each(maxObj, function(value, key) {
 
-        var minKey = (createHeader) ? dict.add(key) : 0;
+        var minKey = (inArray) ? dict.add(key) : 0;
 
         if (value !== null && typeof value === 'object') {
           // Array or Object
-          if (createHeader) {
+          if (inArray) {
             header.push(minKey);
           }
 
@@ -134,12 +134,16 @@
           } else {
             // Found, make minKey negative and set value to valueId
             header.push(-minKey);
-            target.push(valueId);
+            if (!inArray) {
+              target.push(value);
+            } else {
+              target.push(valueId);
+            }
           }
         }
       });
 
-      if (createHeader) {
+      if (inArray) {
         var headerId = getHeader(header);
         target.unshift(headerId);
       } else {
