@@ -31,6 +31,14 @@ Tinytest.add('Minify Maxify - test date', function(test) {
   test.instanceOf(fromString.updatedAt, Date, 'Date is not handled correctly');
 });
 
+Tinytest.add('Minify Maxify - raw test', function(test) {
+  var foo = ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}];
+  var barMini = MiniMax.minify(foo);
+  var bar = MiniMax.maxify(barMini);
+
+  test.isTrue(equals(foo,  bar), 'Raw compare failed "' + JSON.stringify(barMini) + '" -> "' + JSON.stringify(bar)) + '"';
+});
+
 
 Tinytest.add('Minify Maxify - test', function(test) {
   var minResult, maxResult, ejsonResult, savedBytes;
