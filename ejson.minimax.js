@@ -9,15 +9,13 @@
 
   Minify and Maxify by RaiX aka Morten N.O. Nørgaard Henriksen (mh@gi-software.com)
 
-  EJSON.minify( Object )
+  MiniMax.minify( Object )
 
-  EJSON.maxify( array )
+  MiniMax.maxify( array )
 
-  TODO:
-  Make minify and maxify object operators only - leave the stringify and parsing
-  to the user if they need it - This way the operation is isolated and could be
-  used in more cases
+  MiniMax.stringify( object )
 
+  MiniMax.parse( string )
 
   // For faster lookup
   var keywords = {
