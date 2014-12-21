@@ -49,6 +49,10 @@
     // Make sure options is set
     options = options || {};
 
+    // Setting this true will add all values and dates to the dictionary
+    // This can in some cases save
+    self.progressive = (options.progressive === false)? false : true;
+
     // Set the default Dictionary
     // If the user added initial dictionary then add those
     self.dictionary = new Dictionary(_.union([false, true, null, undefined], options.dictionary || [] ));
@@ -109,32 +113,32 @@
 
         var minKey = (inArray) ? dict.add(key) : 0;
 
-        if (value !== null && typeof value === 'object') {
+        if (value !== null && typeof value === 'object' && !(value instanceof Date)) {
           // Array or Object
           if (inArray) {
             header.push(minKey);
           }
 
-          if (value instanceof Date) {
-            // Dont minify dates
-            target.push(value);
-          } else {
-            target.push(minifyHelper(value));
-          }
-        } else {
-          // Check if value is found in keywords
-          var valueId = dict.index(value);
+          // Handle the object
+          target.push(minifyHelper(value));
 
-          if (valueId === undefined) {
+        } else {
+          // Depending on the progressive settings this will
+          // Check if value is found in keywords
+          // Always set the value in keywords dictionary
+          var valueId = (self.progressive) ? dict.add(value) : dict.index(value);
+
+          if (typeof valueId == 'undefined') {
             // Not found, we add normal values
             header.push(minKey);
             target.push(value);
           } else {
-            // Found, make minKey negative and set value to valueId
+
             header.push(-minKey);
             if (!inArray) {
               target.push(value);
             } else {
+              // Found, make minKey negative and set value to valueId
               target.push(valueId);
             }
           }
