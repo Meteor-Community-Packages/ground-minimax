@@ -22,7 +22,9 @@ Schema and schema less documents are minified to an array format:
   // This will help MiniMax compress the data even more.
   // The order and combination is vital for when uncompressing the data
   var myMiniDB = new MiniMax({
-    dictionary: ['createdAt', 'createdBy', 'UpdatedAt', 'UpdatedBy']
+    dictionary: ['createdAt', 'createdBy', 'UpdatedAt', 'UpdatedBy'],
+    // progressive: false // Default true, puts values in dictionary
+    // - if false only keys are added
   });
 
   // By default an instance of MiniMax is available using the default
