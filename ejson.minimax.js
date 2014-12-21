@@ -223,14 +223,18 @@
     return maxifyHelper(data);
   };
 
-  MiniMax.prototype.stringify = function(obj) {
-    var ejsonObj = EJSON.toJSONValue(obj);
-    return JSON.stringify(this.minify(ejsonObj));
+  MiniMax.prototype.stringify = function(plainObject) {
+    // Compress the object
+    var minifiedObject = this.minify(plainObject);
+    // Convert it into string
+    return EJSON.stringify(minifiedObject);
   };
 
-  MiniMax.prototype.parse = function(str) {
-    var ejsonObj = this.maxify(JSON.parse(str));
-    return EJSON.fromJSONValue(ejsonObj);
+  MiniMax.prototype.parse = function(ejsonString) {
+    // Convert the string into minified object
+    var minifiedObject = EJSON.parse(ejsonString);
+    // Maxify the object
+    return this.maxify(minifiedObject);
   };
 
 ////////////////////////////////////////////////////////////////////////////////
