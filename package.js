@@ -16,7 +16,7 @@ Package.onUse(function (api) {
     'ejson'
   ], ['client', 'server']);
 
-  api.use(['ground:dictionary@0.1.2'], ['client', 'server']);
+  api.use(['ground:dictionary@0.2.0'], ['client', 'server']);
 
   api.export('MiniMax');
 
