@@ -1,6 +1,8 @@
 ground:minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
 ===============
 
+This package adds object compression and decompression of objects.
+
 This is a small package that adds:
 * `MiniMax.minify` Compress object to array structure
 * `MiniMax.maxify` Decompress to object
