@@ -228,8 +228,13 @@
   };
 
   MiniMax.prototype.stringify = function(plainObject) {
+    // Keep only serializable (with EJSON) keys
+    // You could instead only filter out functions, but
+    // this is probably more future proof if EJSON get new capabilities
+    // or the user use a custom EJSON
+    var serializableObject = EJSON.parse(EJSON.stringify(plainObject));
     // Compress the object
-    var minifiedObject = this.minify(plainObject);
+    var minifiedObject = this.minify(serializableObject);
     // Convert it into string
     return EJSON.stringify(minifiedObject);
   };
