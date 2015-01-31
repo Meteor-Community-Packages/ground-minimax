@@ -9,7 +9,7 @@ This is a small package that adds:
 * `MiniMax.stringify` ~ Like a compressed version of `EJSON.stringify`
 * `MiniMax.parse` ~ Like the decomressing version of `EJSON.parse`
 
-##Usage
+## Usage
 In short:
 Schema and schema less documents are minified to an array format:
   1. Array of keywords
@@ -37,7 +37,7 @@ Schema and schema less documents are minified to an array format:
   MiniMax.parse
 ```
 
-##How does it work? (example)
+## How does it work? (example)
 
 Our data object:
 ```js
@@ -101,6 +101,6 @@ The keyword array contains key names
 
 ```
 
-##Future
+## Future
 * Faster code
 * Better compression
