@@ -13,6 +13,7 @@ var speedTest = function(name, num, func) {
   console.log(name + ((Date.now() - startTime))/num + ' ms');
 }
 
+
 Tinytest.add('Minify Maxify - test date', function(test) {
   var newTimeStamp = 1409300873188;
   var newDate = new Date(newTimeStamp);
@@ -279,6 +280,13 @@ Tinytest.add('Minify Maxify - test', function(test) {
   });
 
 
+});
+
+
+Tinytest.add('Minify Maxify - Objects with functions', function(test){
+  var obj = {a:1,b:function(){return "foo";},c:function(){return "bar";}};
+  var result = MiniMax.parse(MiniMax.stringify(obj));
+  test.isTrue(_.isEqual({a:1},result, "keys containing functions should be dropped"));
 });
 
 
