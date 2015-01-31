@@ -113,7 +113,8 @@
 
         var minKey = (inArray) ? dict.add(key) : 0;
 
-        if (value !== null && typeof value === 'object' && !(value instanceof Date)) {
+        if (value !== null && typeof value === 'object' &&
+                  !(value instanceof Date) && typeof value !== 'function') {
           // Array or Object
           if (inArray) {
             header.push(minKey);
