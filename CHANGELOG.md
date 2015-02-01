@@ -1,6 +1,14 @@
 # Changelog
 
 ## vCurrent
+## [v1.1.1] (https://github.com/GroundMeteor/minimax/tree/v1.1.1)
+#### 31/01/15 by Morten Henriksen
+- Please the meteor package system
+
+- Bump to version 1.1.1
+
+- fix https://github.com/GroundMeteor/db/issues/78
+
 ## [v1.1.0] (https://github.com/GroundMeteor/minimax/tree/v1.1.0)
 #### 21/12/14 by Morten Henriksen
 - Document progressive mode
@@ -35,7 +43,7 @@
 
 - update the git hub url
 
-## [master] (https://github.com/GroundMeteor/minimax/tree/master)
+## [v0.1.0] (https://github.com/GroundMeteor/minimax/tree/v0.1.0)
 #### 29/08/14 by Morten Henriksen
 - Merge branch 'pre-mps'
 
