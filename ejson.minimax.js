@@ -58,7 +58,7 @@
     self.dictionary = new Dictionary(_.union([false, true, null, undefined], options.dictionary || [] ));
   };
 
-  MiniMax.prototype.minify = function(maxObj) {
+  MiniMax.prototype.minify = function(maxObj, skipFunctions) {
     var self = this;
     var headers = [0];
 
@@ -111,10 +111,13 @@
 
       _.each(maxObj, function(value, key) {
 
+        if (skipFunctions && typeof value === 'function')
+          return;
+
         var minKey = (inArray) ? dict.add(key) : 0;
 
         if (value !== null && typeof value === 'object' &&
-                  !(value instanceof Date) && typeof value !== 'function') {
+                  !(value instanceof Date)) {
           // Array or Object
           if (inArray) {
             header.push(minKey);
@@ -230,7 +233,7 @@
 
   MiniMax.prototype.stringify = function(plainObject) {
     // Compress the object
-    var minifiedObject = this.minify(plainObject);
+    var minifiedObject = this.minify(plainObject, true);
     // Convert it into string
     return EJSON.stringify(minifiedObject);
   };
@@ -248,8 +251,8 @@
 
 var defaultMiniMax = new MiniMax();
 
-MiniMax.minify = function(maxObj) {
-  return defaultMiniMax.minify(maxObj);
+MiniMax.minify = function(maxObj, skipFunctions) {
+  return defaultMiniMax.minify(maxObj, skipFunctions);
 };
 
 MiniMax.maxify = function(minObj) {

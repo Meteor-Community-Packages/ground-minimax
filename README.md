@@ -31,10 +31,10 @@ Schema and schema less documents are minified to an array format:
 
   // By default an instance of MiniMax is available using the default
   // dictionary
-  MiniMax.minify
-  MiniMax.maxify
-  MiniMax.stringify
-  MiniMax.parse
+  MiniMax.minify(obj, [skipFunctions=false])
+  MiniMax.maxify(obj)
+  MiniMax.stringify(obj)
+  MiniMax.parse(string)
 ```
 
 ## How does it work? (example)

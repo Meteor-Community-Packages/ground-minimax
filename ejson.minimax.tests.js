@@ -31,6 +31,39 @@ Tinytest.add('Minify Maxify - test date', function(test) {
   test.instanceOf(fromString.updatedAt, Date, 'Date is not handled correctly');
 });
 
+Tinytest.add('Minify Maxify - Objects with functions', function(test){
+  var foo = function() {
+    return "foo";
+  };
+
+  var bar = function() {
+    return "bar";
+  };
+
+  var obj = {
+    a: 1,
+    foo: foo,
+    bar: bar
+  };
+
+  // We want to check that functions are preserved during minify and maxify
+  var mmObj = MiniMax.maxify(MiniMax.minify(obj));
+
+  test.isTrue(mmObj.foo === foo, 'Function not preserved');
+  test.isTrue(mmObj.bar === bar, 'Function not preserved');
+
+  // We want to check that functions are NOT preserved during minify and maxify
+  // when setting the "skipFunctions" true
+  var mmObjSkip = MiniMax.maxify(MiniMax.minify(obj, true));
+
+  test.isUndefined(mmObjSkip.foo, 'Function should not be preserved when using the skipFunctions flag=true');
+  test.isUndefined(mmObjSkip.bar, 'Function should not be preserved when using the skipFunctions flag=true');
+
+  // We want to check that stringify and parse works correctly
+  var result = MiniMax.parse(MiniMax.stringify(obj));
+  test.isTrue(equals({ a: 1 }, result), "keys containing functions should be dropped" + JSON.stringify(result));
+});
+
 Tinytest.add('Minify Maxify - raw test', function(test) {
   var foo = ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}];
   var barMini = MiniMax.minify(foo);
