@@ -31,6 +31,201 @@ Tinytest.add('Minify Maxify - test date', function(test) {
   test.instanceOf(fromString.updatedAt, Date, 'Date is not handled correctly');
 });
 
+Tinytest.add('Minify Maxify - Objects with functions', function(test){
+  var foo = function() {
+    return "foo";
+  };
+
+  var bar = function() {
+    return "bar";
+  };
+
+  var obj = {
+    a: 1,
+    foo: foo,
+    bar: bar
+  };
+
+  // We want to check that functions are preserved during minify and maxify
+  var mmObj = MiniMax.maxify(MiniMax.minify(obj));
+
+  test.isTrue(mmObj.foo === foo, 'Function not preserved');
+  test.isTrue(mmObj.bar === bar, 'Function not preserved');
+
+  // We want to check that functions are NOT preserved during minify and maxify
+  // when setting the "skipFunctions" true
+  var mmObjSkip = MiniMax.maxify(MiniMax.minify(obj, true));
+
+  test.isUndefined(mmObjSkip.foo, 'Function should not be preserved when using the skipFunctions flag=true');
+  test.isUndefined(mmObjSkip.bar, 'Function should not be preserved when using the skipFunctions flag=true');
+
+  // We want to check that stringify and parse works correctly
+  var result = MiniMax.parse(MiniMax.stringify(obj));
+  test.isTrue(equals({ a: 1 }, result), "keys containing functions should be dropped" + JSON.stringify(result));
+});
+
+Tinytest.add('Minify Maxify - raw test', function(test) {
+  var foo = ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}];
+  var barMini = MiniMax.minify(foo);
+  var bar = MiniMax.maxify(barMini);
+  test.isTrue(equals(foo,  bar), 'Raw compare failed "' + JSON.stringify(barMini) + '" -> "' + JSON.stringify(bar) + '"');
+});
+
+Tinytest.add('Minify Maxify - raw test object', function(test) {
+  var foo = { a: ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}] };
+  var barMini = MiniMax.minify(foo);
+  var bar = MiniMax.maxify(barMini);
+
+  test.isTrue(equals(foo,  bar), 'Raw compare failed "' + JSON.stringify(barMini) + '" -> "' + JSON.stringify(bar) + '"');
+});
+
+Tinytest.add('Minify Maxify - dictionary raw', function(test) {
+  var MiniMaxDB = new MiniMax({
+    // We add the most general words in databases
+    dictionary: ['_id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy']
+  });
+  var foo = {
+    _id: '333',
+    createdBy: 'Morten',
+    createdAt: new Date(),
+    updatedBy: 'Morten',
+    updatedAt: new Date(),
+    a: ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}]
+  };
+  var barMini = MiniMaxDB.minify(foo);
+  var bar = MiniMaxDB.maxify(barMini);
+
+
+console.log('BAR', barMini);
+  test.isTrue(equals(foo,  bar), 'Raw compare failed "' + JSON.stringify(barMini) + '" -> "' + JSON.stringify(bar) + '"');
+});
+
+Tinytest.add('Minify Maxify - dictionary raw medium', function(test) {
+  var MiniMaxDB = new MiniMax({
+    // We add the most general words in databases
+    dictionary: ['_id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy']
+  });
+
+  var map = {};
+
+  for (var i = 0; i < 5; i++) {
+
+    var id = Random.id();
+
+    var d = new Date();
+
+    map[id] = {
+      _id: id,
+      createdBy: 'Morten',
+      createdAt: d,
+      updatedBy: 'Morten',
+      updatedAt: d,
+      a: ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}]
+    };
+
+  }
+
+  var ejsonMap = EJSON.stringify(map);
+
+  var barMini = MiniMaxDB.minify(map);
+  var bar = MiniMaxDB.maxify(barMini);
+
+
+  _.each(map, function(item, id) {
+    var strA = EJSON.stringify(item);
+    var strB = EJSON.stringify(bar[id]);
+    test.equal(strA, strB, 'Raw compare of ' + id + ' failed');
+  });
+
+
+
+  // var barEjsonMap = EJSON.stringify(bar);
+
+  // test.equal(ejsonMap,  barEjsonMap, 'Raw compare failed');
+});
+
+Tinytest.add('Minify Maxify - dictionary raw bigger', function(test) {
+  var MiniMaxDB = new MiniMax({
+    // We add the most general words in databases
+    dictionary: ['_id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'],
+    progressive: false
+  });
+
+  var map = {};
+
+  for (var i = 0; i < 500; i++) {
+
+    var id = Random.id();
+
+    var d = new Date();
+
+    map[id] = {
+      _id: id,
+      createdBy: 'Morten',
+      createdAt: d,
+      updatedBy: 'Morten',
+      updatedAt: d,
+      a: ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}]
+    };
+
+  }
+
+  var ejsonMap = EJSON.stringify(map);
+
+  var barMini = MiniMaxDB.minify(map);
+  var bar = MiniMaxDB.maxify(barMini);
+
+
+  _.each(map, function(item, id) {
+    var strA = EJSON.stringify(item);
+    var strB = EJSON.stringify(bar[id]);
+    test.equal(strA, strB, 'Raw compare of ' + id + ' failed');
+  });
+
+});
+
+Tinytest.add('Minify Maxify - dictionary raw bigger progressive', function(test) {
+  var MiniMaxDB = new MiniMax({
+    // We add the most general words in databases
+    dictionary: ['_id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'],
+    progressive: true
+  });
+
+  var map = {};
+
+  for (var i = 0; i < 500; i++) {
+
+    var id = Random.id();
+
+    var d = new Date();
+
+    map[id] = {
+      _id: id,
+      createdBy: 'Morten',
+      createdAt: d,
+      updatedBy: 'Morten',
+      updatedAt: d,
+      a: ['_id', false, true, null, -1, 0, 1, 1.1, -1.1, 'foo', new Date(), undefined, [1], [ 'foo', 'bar'], { foo: 'bar'}]
+    };
+
+  }
+
+  var ejsonMap = EJSON.stringify(map);
+
+  var barMini = MiniMaxDB.stringify(map);
+  var bar = MiniMaxDB.parse(barMini);
+
+  barMini = MiniMaxDB.stringify(bar);
+  bar = MiniMaxDB.parse(barMini);
+
+
+  _.each(map, function(item, id) {
+    var strA = EJSON.stringify(item);
+    var strB = EJSON.stringify(bar[id]);
+    test.equal(strA, strB, 'Raw compare of ' + id + ' failed');
+  });
+
+});
 
 Tinytest.add('Minify Maxify - test', function(test) {
   var minResult, maxResult, ejsonResult, savedBytes;

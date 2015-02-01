@@ -1,15 +1,21 @@
 /*
+
+
+                    __  ____       _ __  ___
+                   /  |/  (_)___  (_)  |/  /___ __  __
+                  / /|_/ / / __ \/ / /|_/ / __ `/ |/_/
+                 / /  / / / / / / / /  / / /_/ />  <
+                /_/  /_/_/_/ /_/_/_/  /_/\__,_/_/|_|
+
   Minify and Maxify by RaiX aka Morten N.O. Nørgaard Henriksen (mh@gi-software.com)
 
-  EJSON.minify( Object )
+  MiniMax.minify( Object )
 
-  EJSON.maxify( array )
+  MiniMax.maxify( array )
 
-  TODO:
-  Make minify and maxify object operators only - leave the stringify and parsing
-  to the user if they need it - This way the operation is isolated and could be
-  used in more cases
+  MiniMax.stringify( object )
 
+  MiniMax.parse( string )
 
   // For faster lookup
   var keywords = {
@@ -33,21 +39,31 @@
   // }
 
   // Create the export scope
-  if (typeof MiniMax === 'undefined')
-    MiniMax = {};
-  // Create a new dictionary
-  MiniMax.Dictionary = new Dictionary();
+  MiniMax = function(options) {
+    var self = this;
 
-  // Set the initial dicationary
-  MiniMax.Dictionary.set([false, true, null]);
+    // Make sure we are on an instance
+    if (!(self instanceof MiniMax))
+      return new MiniMax(options);
 
+    // Make sure options is set
+    options = options || {};
 
-  MiniMax.minify = function(maxObj) {
+    // Setting this true will add all values and dates to the dictionary
+    // This can in some cases save
+    self.progressive = (options.progressive === false)? false : true;
 
+    // Set the default Dictionary
+    // If the user added initial dictionary then add those
+    self.dictionary = new Dictionary(_.union([false, true, null, undefined], options.dictionary || [] ));
+  };
+
+  MiniMax.prototype.minify = function(maxObj, skipFunctions) {
+    var self = this;
     var headers = [0];
 
     // Start dictionary
-    var dict = new Dictionary(MiniMax.Dictionary);
+    var dict = new Dictionary(self.dictionary);
 
     var getHeader = function(newHeader) {
       var headerId = null;
@@ -89,43 +105,51 @@
     };
 
     var minifyHelper = function(maxObj) {
-      var createHeader = !_.isArray(maxObj);
+      var inArray = !_.isArray(maxObj);
       var target = [];
       var header = [];
 
       _.each(maxObj, function(value, key) {
 
-        var minKey = (createHeader) ? dict.add(key) : 0;
+        if (skipFunctions && typeof value === 'function')
+          return;
 
-        if (value !== null && typeof value === 'object') {
+        var minKey = (inArray) ? dict.add(key) : 0;
+
+        if (value !== null && typeof value === 'object' &&
+                  !(value instanceof Date)) {
           // Array or Object
-          if (createHeader) {
+          if (inArray) {
             header.push(minKey);
           }
 
-          if (value instanceof Date) {
-            // Dont minify dates
-            target.push(value);
-          } else {
-            target.push(minifyHelper(value));
-          }
-        } else {
-          // Check if value is found in keywords
-          var valueId = dict.index(value);
+          // Handle the object
+          target.push(minifyHelper(value));
 
-          if (valueId === undefined) {
+        } else {
+          // Depending on the progressive settings this will
+          // Check if value is found in keywords
+          // Always set the value in keywords dictionary
+          var valueId = (self.progressive) ? dict.add(value) : dict.index(value);
+
+          if (typeof valueId == 'undefined') {
             // Not found, we add normal values
             header.push(minKey);
             target.push(value);
           } else {
-            // Found, make minKey negative and set value to valueId
+
             header.push(-minKey);
-            target.push(valueId);
+            if (!inArray) {
+              target.push(value);
+            } else {
+              // Found, make minKey negative and set value to valueId
+              target.push(valueId);
+            }
           }
         }
       });
 
-      if (createHeader) {
+      if (inArray) {
         var headerId = getHeader(header);
         target.unshift(headerId);
       } else {
@@ -148,14 +172,17 @@
 
 
   // Takes an minify object and maxify to object
-  MiniMax.maxify = function(minObj) {
+  MiniMax.prototype.maxify = function(minObj) {
+    var self = this;
+
     // We expect an array of 3
     if (minObj === null || minObj.length !== 3) {
       // Return object
       return minObj;
     }
+
     // Init globals
-    var dict = new Dictionary(MiniMax.Dictionary);
+    var dict = new Dictionary(self.dictionary);
     dict.addList(minObj[0]);
 
     var headers = minObj[1];
@@ -204,12 +231,38 @@
     return maxifyHelper(data);
   };
 
-  MiniMax.stringify = function(obj) {
-    var ejsonObj = EJSON.toJSONValue(obj);
-    return JSON.stringify(this.minify(ejsonObj));
+  MiniMax.prototype.stringify = function(plainObject) {
+    // Compress the object
+    var minifiedObject = this.minify(plainObject, true);
+    // Convert it into string
+    return EJSON.stringify(minifiedObject);
   };
 
-  MiniMax.parse = function(str) {
-    var ejsonObj = this.maxify(JSON.parse(str));
-    return EJSON.fromJSONValue(ejsonObj);
+  MiniMax.prototype.parse = function(ejsonString) {
+    // Convert the string into minified object
+    var minifiedObject = EJSON.parse(ejsonString);
+    // Maxify the object
+    return this.maxify(minifiedObject);
   };
+
+////////////////////////////////////////////////////////////////////////////////
+//  DEFAULT BEHAVIOUR
+////////////////////////////////////////////////////////////////////////////////
+
+var defaultMiniMax = new MiniMax();
+
+MiniMax.minify = function(maxObj, skipFunctions) {
+  return defaultMiniMax.minify(maxObj, skipFunctions);
+};
+
+MiniMax.maxify = function(minObj) {
+  return defaultMiniMax.maxify(minObj);
+};
+
+MiniMax.stringify = function(obj) {
+  return defaultMiniMax.stringify(obj);
+};
+
+MiniMax.parse = function(str) {
+  return defaultMiniMax.parse(str);
+};

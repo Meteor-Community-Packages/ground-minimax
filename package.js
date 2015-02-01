@@ -1,26 +1,34 @@
 Package.describe({
-  name: "raix:minimax",
-  version: '0.1.0',
-  summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects"
+  name: "ground:minimax",
+  version: '1.1.1',
+  summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects",
+  git: "https://github.com/GroundMeteor/minimax.git"
 });
 
-Package.on_use(function (api) {
+Package.onUse(function (api) {
+
   // TODO: remove underscore deps _.each (used once)
+
+  api.versionsFrom('1.0');
+
   api.use([
     'underscore@1.0.0',
     'ejson@1.0.0'
   ], ['client', 'server']);
-  api.use(['raix:dictionary@0.0.0'], ['client', 'server']);
+
+  api.use(['ground:dictionary@0.2.0'], ['client', 'server']);
+
   api.export('MiniMax');
 
-  api.add_files('ejson.minimax.js', ['client', 'server']);
+  api.addFiles('ejson.minimax.js', ['client', 'server']);
 });
 
-Package.on_test(function (api) {
-  api.use('raix:minimax', ['client', 'server']);
-  api.use('test-helpers', 'client');
-  api.use(['tinytest', 'underscore', 'ejson']);
+Package.onTest(function (api) {
 
-  api.add_files('ejson.minimax.tests.js', ['client', 'server']);
+  api.use('ground:minimax', ['client', 'server']);
+  api.use('test-helpers', 'client');
+  api.use(['tinytest', 'underscore', 'ejson', 'random']);
+
+  api.addFiles('ejson.minimax.tests.js', ['client', 'server']);
 
 });

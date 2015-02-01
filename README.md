@@ -1,5 +1,7 @@
-Minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
+ground:minimax [![Build Status](https://travis-ci.org/GroundMeteor/ejson-minimax.png?branch=master)](https://travis-ci.org/GroundMeteor/ejson-minimax)
 ===============
+
+This package adds object compression and decompression of objects.
 
 This is a small package that adds:
 * `MiniMax.minify` Compress object to array structure
@@ -7,14 +9,35 @@ This is a small package that adds:
 * `MiniMax.stringify` ~ Like a compressed version of `EJSON.stringify`
 * `MiniMax.parse` ~ Like the decomressing version of `EJSON.parse`
 
-##Usage
+## Usage
 In short:
 Schema and schema less documents are minified to an array format:
   1. Array of keywords
   2. Array of data schemas
   3. Array of data
 
-##How does it work? (example)
+```js
+  // The default got false, true, null and undefined in dictionary
+  var normalMiniMax = new MiniMax();
+
+  // Add additional words to the dictionary, eg. if used on a database,
+  // This will help MiniMax compress the data even more.
+  // The order and combination is vital for when uncompressing the data
+  var myMiniDB = new MiniMax({
+    dictionary: ['createdAt', 'createdBy', 'UpdatedAt', 'UpdatedBy'],
+    // progressive: false // Default true, puts values in dictionary
+    // - if false only keys are added
+  });
+
+  // By default an instance of MiniMax is available using the default
+  // dictionary
+  MiniMax.minify(obj, [skipFunctions=false])
+  MiniMax.maxify(obj)
+  MiniMax.stringify(obj)
+  MiniMax.parse(string)
+```
+
+## How does it work? (example)
 
 Our data object:
 ```js
@@ -78,6 +101,6 @@ The keyword array contains key names
 
 ```
 
-##Future
+## Future
 * Faster code
 * Better compression
