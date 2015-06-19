@@ -227,6 +227,41 @@ Tinytest.add('Minify Maxify - dictionary raw bigger progressive', function(test)
 
 });
 
+Tinytest.add('Minify Maxify - type test', function(test) {
+
+  // Using the ground db dictionary
+  var MiniMaxDB = new MiniMax({
+    // We add the most general words in databases
+    dictionary: ['_id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy']
+  });
+
+  var fooMap = {
+    '1': {
+      _id: '1',
+      foo: 1,
+      bar: '1'
+    },
+    'true': {
+      _id: 'true',
+      foo: true,
+      bar: 'true'
+    },
+    '2': {
+      _id: '2',
+      foo: 2,
+      bar: '2'
+    }
+  };
+
+  var fooMini = MiniMaxDB.stringify(fooMap);
+  var foo = MiniMaxDB.parse(fooMini);
+
+  console.log(fooMap, foo);
+
+  test.equal(fooMap, foo);
+
+});
+
 Tinytest.add('Minify Maxify - test', function(test) {
   var minResult, maxResult, ejsonResult, savedBytes;
 

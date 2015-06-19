@@ -1,6 +1,6 @@
 Package.describe({
   name: "ground:minimax",
-  version: '1.1.2',
+  version: '1.1.3',
   summary: "Adds MiniMax.minify/maxify/parse/stringify making compress and decompress objects",
   git: "https://github.com/GroundMeteor/minimax.git"
 });
@@ -16,7 +16,7 @@ Package.onUse(function (api) {
     'ejson@1.0.0'
   ], ['client', 'server']);
 
-  api.use(['ground:dictionary@0.2.0'], ['client', 'server']);
+  api.use(['ground:dictionary@0.2.1'], ['client', 'server']);
 
   api.export('MiniMax');
 
