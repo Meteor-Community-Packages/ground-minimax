@@ -227,8 +227,14 @@
       }
       return result;
     };
+    var maxifiedDoc = maxifyHelper(data);
 
-    return maxifyHelper(data);
+    // Check if original doc had _id set as ObjectID, and if so
+    // recreate it as ObjectID since minimongo won't accept it otherwise
+    if(maxifiedDoc._id._str)
+      maxifiedDoc._id = new Meteor.Collection.ObjectID(maxifiedDoc._id._str);
+
+    return maxifiedDoc;
   };
 
   MiniMax.prototype.stringify = function(plainObject) {
