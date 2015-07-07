@@ -231,9 +231,12 @@
 
     // Check if original doc had _id set as ObjectID, and if so
     // recreate it as ObjectID since minimongo won't accept it otherwise
-    if(maxifiedDoc._id._str)
-      maxifiedDoc._id = new Meteor.Collection.ObjectID(maxifiedDoc._id._str);
-
+    var maxifiedDoc = maxifyHelper(data);
+    _.each(maxifiedDoc, function(doc) {
+      if(doc._id._str){
+        doc._id = new Mongo.ObjectID(doc._id._str);
+      }
+    });
     return maxifiedDoc;
   };
 
